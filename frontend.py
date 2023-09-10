@@ -128,3 +128,4 @@ if _function == 'SELF DESTRUCT':
     st.write('JK don\'t kill tommy pls :3')
     time.sleep(3)
     st.write('Putting you back now...')
+    st.balloons()
