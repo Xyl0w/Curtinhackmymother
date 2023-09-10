@@ -68,23 +68,13 @@ def create_pca_plot(X_pca, clusters, classes):
 if _function == 'Display Provided Dataset' or _function == 'Display EDMS Dataset':
     if selected_rows:
         for selected_row in selected_rows:
-            with st.expander("See Full Selected Data"):
-                st.write(selected_row)
+
             
             # Create X_pca as a list of tuples
             X_pca = np.array(list(zip(pca1_values, pca2_values)))
 
             # Create a PCA plot
             pca_plot = create_pca_plot(X_pca, clusters, classes)
-
-            with st.expander("See Real Time Analysis"):
-                st.write("The Chart Below Shows Clusters Based on Component Importance.")
-                st.pyplot(pca_plot)
-                #iterate through image folder and display images
-                for file in os.listdir(image_folder):
-                    filepath = os.path.join(image_folder, file)
-                    st.image(filepath, width=650)
-                
                     
             # Assuming you want to access columns starting from the 6th column
             selected_values = [selected_row[column] for column in selected_row.keys()][5:]
@@ -114,7 +104,16 @@ if _function == 'Display Provided Dataset' or _function == 'Display EDMS Dataset
                     filepath = selected_row['filepath']
                     st.image(filepath, width=200)
 
-            
+            with st.expander("See Real Time Analysis"):
+                st.write("The Chart Below Shows Clusters Based on Component Importance.")
+                st.pyplot(pca_plot)
+                #iterate through image folder and display images
+                for file in os.listdir(image_folder):
+                    filepath = os.path.join(image_folder, file)
+                    st.image(filepath, width=200)
+                
+            with st.expander("See Full Selected Data"):
+                st.write(selected_row)
     else:
         st.write('No rows selected')
      
