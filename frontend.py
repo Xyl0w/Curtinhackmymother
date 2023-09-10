@@ -13,10 +13,12 @@ _function = st.sidebar.radio("Functions", ['Display Provided Dataset', 'Display 
 
 if _function == 'Display Provided Dataset':
     df = pd.read_csv('test.csv', index_col=0)
+    image_folder = 'sample_stuff'
     st.write('Displaying Dataset 1')
     
 if _function == 'Display EDMS Dataset':
     df = pd.read_csv('test_emd.csv', index_col=0)
+    image_folder = 'images_edm'
     st.write('Displaying Dataset 2')
 # Configure grid options with pagination
 gd = GridOptionsBuilder.from_dataframe(df)
@@ -78,7 +80,12 @@ if _function == 'Display Provided Dataset' or _function == 'Display EDMS Dataset
             with st.expander("See Real Time Analysis"):
                 st.write("The Chart Below Shows Clusters Based on Component Importance.")
                 st.pyplot(pca_plot)
-            
+                #iterate through image folder and display images
+                for file in os.listdir(image_folder):
+                    filepath = os.path.join(image_folder, file)
+                    st.image(filepath, width=650)
+                
+                    
             # Assuming you want to access columns starting from the 6th column
             selected_values = [selected_row[column] for column in selected_row.keys()][5:]
 
@@ -106,6 +113,7 @@ if _function == 'Display Provided Dataset' or _function == 'Display EDMS Dataset
                 with col2:
                     filepath = selected_row['filepath']
                     st.image(filepath, width=200)
+
             
     else:
         st.write('No rows selected')
@@ -118,6 +126,3 @@ if _function == 'SELF DESTRUCT':
     st.write('JK don\'t kill tommy pls :3')
     time.sleep(3)
     st.write('Putting you back now...')
-    #select display
-    _function = 'Display'
-    
