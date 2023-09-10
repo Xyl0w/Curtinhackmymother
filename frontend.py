@@ -94,7 +94,7 @@ if _function == 'Display Provided Dataset' or _function == 'Display EDMS Dataset
             display_df = pd.DataFrame(top_3_values_with_column_names, columns=['Object Most Similar', 'Probability'])
             
             with st.expander("See Top 3 Similar Objects"):
-                col1, col2 = st.columns(2)
+                col1, col2 = st.columns([2,1])
                 with col1:
                     display_df = pd.DataFrame(top_3_values_with_column_names, columns=['Object Most Similar', 'Probability'])
                     st.write(display_df)
@@ -112,6 +112,11 @@ if _function == 'Display Provided Dataset' or _function == 'Display EDMS Dataset
                 for file in os.listdir(image_folder):
                     filepath = os.path.join(image_folder, file)
                     st.image(filepath, width=250)
+                    
+            with st.expander("See Full Selected Data"):
+                st.write(selected_row)
+                st.image(filepath, width=250)
+                
     else:
         st.write('No rows selected')
      
