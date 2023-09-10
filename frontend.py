@@ -11,11 +11,11 @@ df = pd.read_csv('test.csv', index_col=0)
 st.header("Tommy's Findings")
 _function = st.sidebar.radio("Functions", ['Display Provided Dataset', 'Display EDMS Dataset', 'SELF DESTRUCT'])
 
-if _function == 'Display Dataset 1':
+if _function == 'Display Provided Dataset':
     df = pd.read_csv('test.csv', index_col=0)
     st.write('Displaying Dataset 1')
     
-if _function == 'Display Dataset 2':
+if _function == 'Display EDMS Dataset':
     df = pd.read_csv('test_emd.csv', index_col=0)
     st.write('Displaying Dataset 2')
 # Configure grid options with pagination
@@ -63,7 +63,7 @@ def create_pca_plot(X_pca, clusters, classes):
     return fig
 
 # From selected rows, check the values of the selected row from the 6th column onwards and print the best 3 values
-if _function == 'Display Dataset 1' or _function == 'Display Dataset 2':
+if _function == 'Display Provided Dataset' or _function == 'Display EDMS Dataset':
     if selected_rows:
         for selected_row in selected_rows:
             with st.expander("See Full Selected Data"):
