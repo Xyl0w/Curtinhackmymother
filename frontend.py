@@ -77,10 +77,10 @@ if _function == 'Display Provided Dataset' or _function == 'Display EDMS Dataset
             pca_plot = create_pca_plot(X_pca, clusters, classes)
                     
             # Assuming you want to access columns starting from the 6th column
-            selected_values = [selected_row[column] for column in selected_row.keys()][5:]
+            selected_values = [selected_row[column] for column in selected_row.keys()][6:]
 
             # Get column names corresponding to the selected values
-            column_names = list(selected_row.keys())[5:]
+            column_names = list(selected_row.keys())[6:]
             # Create a list of tuples (column name, value) for sorting
             values_with_column_names = [(column, value) for column, value in zip(column_names, selected_values)]
 
