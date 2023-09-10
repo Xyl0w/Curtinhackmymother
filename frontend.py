@@ -9,8 +9,15 @@ import time
 df = pd.read_csv('test.csv', index_col=0)
 
 st.header("Tommy's Findings")
-_function = st.sidebar.radio("Functions", ['Display', 'SELF DESTRUCT'])
+_function = st.sidebar.radio("Functions", ['Display Provided Dataset', 'Display EDMS Dataset', 'SELF DESTRUCT'])
 
+if _function == 'Display Dataset 1':
+    df = pd.read_csv('test.csv', index_col=0)
+    st.write('Displaying Dataset 1')
+    
+if _function == 'Display Dataset 2':
+    df = pd.read_csv('test_emd.csv', index_col=0)
+    st.write('Displaying Dataset 2')
 # Configure grid options with pagination
 gd = GridOptionsBuilder.from_dataframe(df)
 gd.configure_side_bar()
@@ -56,7 +63,7 @@ def create_pca_plot(X_pca, clusters, classes):
     return fig
 
 # From selected rows, check the values of the selected row from the 6th column onwards and print the best 3 values
-if _function == 'Display':
+if _function == 'Display Dataset 1' or _function == 'Display Dataset 2':
     if selected_rows:
         for selected_row in selected_rows:
             with st.expander("See Full Selected Data"):
@@ -89,11 +96,16 @@ if _function == 'Display':
             # Display top 3 as a table
             display_df = pd.DataFrame(top_3_values_with_column_names, columns=['Object Most Similar', 'Probability'])
             
-            st.write(display_df)
-            
-            # Take in filepath column value and display image
-            filepath = selected_row['filepath']
-            st.image(filepath, width=200)
+            with st.expander("See Top 3 Similar Objects"):
+                col1, col2 = st.columns(2)
+                with col1:
+                    display_df = pd.DataFrame(top_3_values_with_column_names, columns=['Object Most Similar', 'Probability'])
+                    st.write(display_df)
+
+            # Display the image in the second column
+                with col2:
+                    filepath = selected_row['filepath']
+                    st.image(filepath, width=200)
             
     else:
         st.write('No rows selected')
@@ -103,4 +115,9 @@ if _function == 'SELF DESTRUCT':
     st.balloons()
     st.write('Say goodbye to tommy! ;-; ')
     time.sleep(3)
-    os._exit(1)  # Exit the script
+    st.write('JK don\'t kill tommy pls :3')
+    time.sleep(3)
+    st.write('Putting you back now...')
+    #select display
+    _function = 'Display'
+    
