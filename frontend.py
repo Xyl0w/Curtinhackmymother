@@ -1,13 +1,15 @@
-from st_aggrid import AgGrid
 import streamlit as st
 import pandas as pd
-from st_aggrid import GridOptionsBuilder, GridUpdateMode, DataReturnMode
-
+import matplotlib.pyplot as plt
+import numpy as np
+from st_aggrid import AgGrid, GridOptionsBuilder, GridUpdateMode, DataReturnMode
+import os
+import time
 # Load your DataFrame
 df = pd.read_csv('test.csv', index_col=0)
 
-st.header("Customize AgGrid")
-_function = st.sidebar.radio("Functions", ['Display', 'Highlight', 'Delete'])
+st.header("Tommy's Findings")
+_function = st.sidebar.radio("Functions", ['Display', 'SELF DESTRUCT'])
 
 # Configure grid options with pagination
 gd = GridOptionsBuilder.from_dataframe(df)
@@ -25,12 +27,51 @@ grid_table = AgGrid(df, gridOptions=gd.build(),
                     data_return_mode=DataReturnMode.AS_INPUT,
                     update_mode=GridUpdateMode.MODEL_CHANGED)
 selected_rows = grid_table['selected_rows']
-#from selected rows, check the values of the selected row from the 6th column onwards and print the best 3 values
+clusters = df['cluster']
+classes = df['group']
+pca1_values = df['pca1']
+pca2_values = df['pca2']
+
+# Function to create PCA plot
+def create_pca_plot(X_pca, clusters, classes):
+    row = 0 
+    col = 1
+    color_wheel = ['#1f77b4', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd', '#8c564b', '#e377c2', '#7f7f7f', '#bcbd22', '#17becf']
+    marker_wheel = ["o", "s", "D", "^", "v", "p", "*", "+", "x", "h", "H", "d", "|", "_", "<", ">"]
+    ci, mi = 0, 0 
+    fig, ax = plt.subplots()
+
+    for cluster_value in set(clusters):
+        mi = 0
+        for class_value in set(classes):
+            mask = [True if clusters[idx] == cluster_value and classes[idx] == class_value else False for idx in range(len(clusters))]
+            plt.scatter(X_pca[:, row][mask], X_pca[:, col][mask], c=color_wheel[ci], marker=marker_wheel[mi])
+            mi += 1
+        ci += 1
+    
+    plt.xlabel('PCA 1')
+    plt.ylabel('PCA 2')
+    plt.title('PCA Plot')
+    
+    return fig
+
+# From selected rows, check the values of the selected row from the 6th column onwards and print the best 3 values
 if _function == 'Display':
     if selected_rows:
-        # Assuming selected_rows is a list of dictionaries
-        # Iterate through all selected rows
         for selected_row in selected_rows:
+            with st.expander("See Full Selected Data"):
+                st.write(selected_row)
+            
+            # Create X_pca as a list of tuples
+            X_pca = np.array(list(zip(pca1_values, pca2_values)))
+
+            # Create a PCA plot
+            pca_plot = create_pca_plot(X_pca, clusters, classes)
+
+            with st.expander("See Real Time Analysis"):
+                st.write("The Chart Below Shows Clusters Based on Component Importance.")
+                st.pyplot(pca_plot)
+            
             # Assuming you want to access columns starting from the 6th column
             selected_values = [selected_row[column] for column in selected_row.keys()][5:]
 
@@ -53,5 +94,13 @@ if _function == 'Display':
             # Take in filepath column value and display image
             filepath = selected_row['filepath']
             st.image(filepath, width=200)
+            
     else:
         st.write('No rows selected')
+     
+        
+if _function == 'SELF DESTRUCT':
+    st.balloons()
+    st.write('Say goodbye to tommy! ;-; ')
+    time.sleep(3)
+    os._exit(1)  # Exit the script
