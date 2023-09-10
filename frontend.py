@@ -107,13 +107,11 @@ if _function == 'Display Provided Dataset' or _function == 'Display EDMS Dataset
             with st.expander("See Real Time Analysis"):
                 st.write("The Chart Below Shows Clusters Based on Component Importance.")
                 st.pyplot(pca_plot)
-                #iterate through image folder and display images
+                percentage_width = 80  # You can adjust this as needed
+
                 for file in os.listdir(image_folder):
                     filepath = os.path.join(image_folder, file)
-                    st.image(filepath, width=200)
-                
-            with st.expander("See Full Selected Data"):
-                st.write(selected_row)
+                    st.image(filepath, width=250)
     else:
         st.write('No rows selected')
      
